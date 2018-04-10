@@ -19,3 +19,6 @@
 
 "assets.toolbar.item-selected" = "%ld Item Selected";
 "assets.toolbar.items-selected" = "%ld Items Selected";
+
+"This video is too large" = "This video is too large";
+"OK" = "OK";

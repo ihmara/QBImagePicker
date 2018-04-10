@@ -554,22 +554,44 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 #pragma mark - UICollectionViewDelegate
 
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([self.imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:shouldSelectAsset:)]) {
-        PHAsset *asset = self.fetchResult[indexPath.item];
-        return [self.imagePickerController.delegate qb_imagePickerController:self.imagePickerController shouldSelectAsset:asset];
-    }
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    if ([self isAutoDeselectEnabled]) {
-        return YES;
-    }
+    PHAsset *asset = self.fetchResult[indexPath.item];
     
-    return ![self isMaximumSelectionLimitReached];
+    if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > 15) {
+        
+        NSBundle *bundle = self.imagePickerController.assetBundle;
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedStringFromTableInBundle(@"This video is too large", @"QBImagePicker", bundle, @"")
+                                                                       message:@""
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedStringFromTableInBundle(@"OK", @"QBImagePicker", bundle, @"")
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return NO;
+        
+    } else {
+        
+        if ([self.imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:shouldSelectAsset:)]) {
+            PHAsset *asset = self.fetchResult[indexPath.item];
+            return [self.imagePickerController.delegate qb_imagePickerController:self.imagePickerController shouldSelectAsset:asset];
+        }
+        
+        if ([self isAutoDeselectEnabled]) {
+            return YES;
+        }
+        
+        return ![self isMaximumSelectionLimitReached];
+    }
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     QBImagePickerController *imagePickerController = self.imagePickerController;
     NSMutableOrderedSet *selectedAssets = imagePickerController.selectedAssets;
     
