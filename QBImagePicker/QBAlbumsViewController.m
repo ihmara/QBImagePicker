@@ -247,8 +247,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 {
     NSUInteger minimumNumberOfSelection = MAX(1, self.imagePickerController.minimumNumberOfSelection);
     
-    if (minimumNumberOfSelection <= self.imagePickerController.maximumNumberOfSelection) {
-        return (self.imagePickerController.maximumNumberOfSelection <= self.imagePickerController.selectedAssets.count);
+    if (minimumNumberOfSelection <= (self.imagePickerController.maximumNumberPhotosOfSelection + self.imagePickerController.maximumNumberVideosOfSelection)) {
+        return ((self.imagePickerController.maximumNumberPhotosOfSelection + self.imagePickerController.maximumNumberVideosOfSelection) <= self.imagePickerController.selectedAssets.count);
     }
     
     return NO;

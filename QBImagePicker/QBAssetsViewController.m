@@ -172,8 +172,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (BOOL)isAutoDeselectEnabled
 {
-    return (self.imagePickerController.maximumNumberOfSelection == 1
-            && self.imagePickerController.maximumNumberOfSelection >= self.imagePickerController.minimumNumberOfSelection);
+    return (self.imagePickerController.maximumNumberPhotosOfSelection == 1 && self.imagePickerController.maximumNumberPhotosOfSelection >= self.imagePickerController.minimumNumberOfSelection) || (self.imagePickerController.maximumNumberVideosOfSelection == 1 && self.imagePickerController.maximumNumberVideosOfSelection >= self.imagePickerController.minimumNumberOfSelection);
 }
 
 
@@ -272,8 +271,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 {
     NSUInteger minimumNumberOfSelection = MAX(1, self.imagePickerController.minimumNumberOfSelection);
    
-    if (minimumNumberOfSelection <= self.imagePickerController.maximumNumberOfSelection) {
-        return (self.imagePickerController.maximumNumberOfSelection <= self.imagePickerController.selectedAssets.count);
+    if (minimumNumberOfSelection <= (self.imagePickerController.maximumNumberPhotosOfSelection + self.imagePickerController.maximumNumberVideosOfSelection)) {
+        return ((self.imagePickerController.maximumNumberPhotosOfSelection + self.imagePickerController.maximumNumberVideosOfSelection) <= self.imagePickerController.selectedAssets.count);
     }
    
     return NO;
@@ -558,7 +557,26 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
     PHAsset *asset = self.fetchResult[indexPath.item];
     
-    if (asset.mediaType == PHAssetMediaTypeVideo && asset.duration > 15) {
+    NSArray *selectedVideoAssets = [self.imagePickerController.selectedAssets.array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"mediaType == %lu", (unsigned long)PHAssetMediaTypeVideo]];
+    
+    if (asset.mediaType == PHAssetMediaTypeVideo && ((self.imagePickerController.maximumNumberVideosOfSelection - self.imagePickerController.numberVideosOfSelected) <= selectedVideoAssets.count)) {
+        
+        NSBundle *bundle = self.imagePickerController.assetBundle;
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Number of videos is limited to %lu", @"QBImagePicker", bundle, @""), (unsigned long)self.imagePickerController.maximumNumberVideosOfSelection]
+                                                                       message:@""
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedStringFromTableInBundle(@"OK", @"QBImagePicker", bundle, @"")
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return NO;
+        
+    } else if (asset.mediaType == PHAssetMediaTypeVideo && self.imagePickerController.maximumVideoDuration !=0 && asset.duration > self.imagePickerController.maximumVideoDuration) {
         
         NSBundle *bundle = self.imagePickerController.assetBundle;
         

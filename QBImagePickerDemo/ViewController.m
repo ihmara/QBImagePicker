@@ -38,16 +38,19 @@
                 break;
                 
             case 2:
-                imagePickerController.maximumNumberOfSelection = 6;
+                imagePickerController.maximumNumberPhotosOfSelection = 6;
+                imagePickerController.maximumNumberVideosOfSelection = 6;
                 break;
                 
             case 3:
                 imagePickerController.minimumNumberOfSelection = 3;
-                imagePickerController.maximumNumberOfSelection = 6;
+                imagePickerController.maximumNumberPhotosOfSelection = 6;
+                imagePickerController.maximumNumberVideosOfSelection = 6;
                 break;
 
             case 4:
-                imagePickerController.maximumNumberOfSelection = 2;
+                imagePickerController.maximumNumberPhotosOfSelection = 2;
+                imagePickerController.maximumNumberVideosOfSelection = 2;
                 [imagePickerController.selectedAssets addObject:[PHAsset fetchAssetsWithOptions:nil].lastObject];
                 break;
                 
