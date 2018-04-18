@@ -20,5 +20,5 @@
 "assets.toolbar.item-selected" = "%ld 선택한 항목";
 "assets.toolbar.items-selected" = "%ld 선택한 항목";
 
-"This video is too large" = "이 동영상이 너무 큽니다.";
+"Video limit is %ld seconds" = "동영상 제한은 %ld 초입니다.";
 "OK" = "승인";

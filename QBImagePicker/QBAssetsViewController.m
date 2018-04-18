@@ -467,7 +467,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         cell.videoIndicatorView.hidden = NO;
         
         NSInteger minutes = (NSInteger)(asset.duration / 60.0);
-        NSInteger seconds = (NSInteger)ceil(asset.duration - 60.0 * (double)minutes);
+        NSInteger seconds = (NSInteger)(asset.duration - 60 * minutes);
         cell.videoIndicatorView.timeLabel.text = [NSString stringWithFormat:@"%02ld:%02ld", (long)minutes, (long)seconds];
         
         if (asset.mediaSubtypes & PHAssetMediaSubtypeVideoHighFrameRate) {
@@ -576,11 +576,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         
         return NO;
         
-    } else if (asset.mediaType == PHAssetMediaTypeVideo && self.imagePickerController.maximumVideoDuration !=0 && asset.duration > self.imagePickerController.maximumVideoDuration) {
+    } else if (asset.mediaType == PHAssetMediaTypeVideo && self.imagePickerController.maximumVideoDuration != 0 && (NSInteger)asset.duration > self.imagePickerController.maximumVideoDuration) {
         
         NSBundle *bundle = self.imagePickerController.assetBundle;
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedStringFromTableInBundle(@"This video is too large", @"QBImagePicker", bundle, @"")
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Video limit is %ld seconds", @"QBImagePicker", bundle, @""), (long)self.imagePickerController.maximumVideoDuration]
                                                                        message:@""
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         

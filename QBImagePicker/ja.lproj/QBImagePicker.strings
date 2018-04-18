@@ -20,5 +20,5 @@
 "assets.toolbar.item-selected" = "%ld 項目を選択中";
 "assets.toolbar.items-selected" = "%ld 項目を選択中";
 
-"This video is too large" = "この動画は大きすぎます";
+"Video limit is %ld seconds" = "동영상 제한은 %ld 초입니다.";
 "OK" = "よし";

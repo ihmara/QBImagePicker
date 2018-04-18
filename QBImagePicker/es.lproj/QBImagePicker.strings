@@ -20,5 +20,5 @@
 "assets.toolbar.item-selected" = "%ld items seleccionados";
 "assets.toolbar.items-selected" = "%ld items seleccionados";
 
-"This video is too large" = "Este video es demasiado grande";
+"Video limit is %ld seconds" = "El límite de video es %ld segundos";
 "OK" = "DE ACUERDO";
